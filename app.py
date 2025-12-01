@@ -8,7 +8,7 @@ import base64
 # 1. 환경 변수 로드 (.env 파일이 같은 폴더에 있어야 함)
 load_dotenv()
  
-st.title("청소년 상담 챗봇 'Teeni'")
+st.markdown("<h1>청소년 상담 챗봇 '<span style='color: #008080;'>Teeni</span>'</h1>", unsafe_allow_html=True)
  
 # 2. Azure OpenAI 클라이언트 설정
 # (실제 값은 .env 파일이나 여기에 직접 입력하세요)
