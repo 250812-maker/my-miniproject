@@ -78,16 +78,7 @@ st.set_page_config(page_title="Teeni", page_icon="🌱", layout="wide")
 # 배경색 변경 CSS
 st.markdown("""
     <style>
-    /* 메인 배경색 */
-    .stApp {
-        background-color: #B6DADA;
-    }
-    
-    /* 사이드바 배경색 */
-    [data-testid="stSidebar"] {
-        background-color: #9BC7C7;
-    }
-    
+
     /* 입력 박스 배경색 */
     .stTextInput > div > div > input {
         background-color: white;
