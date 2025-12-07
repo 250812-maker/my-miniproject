@@ -21,7 +21,7 @@ def request_stt(audio_data):
         return None
     
     header = {
-        "Ocp-Apim-Subscription-Key": api_key,
+        "Ocp-Apim-Subscription-Key": "3KDu9w9L3PsFSjcYcTqqkGKctaCoTCIWuvHvPqxd2niN2QpSk5TrJQQJ99BLACYeBjFXJ3w3AAAYACOGI0lI",
         "Content-Type": "audio/wav"
     }
     
@@ -51,7 +51,7 @@ def request_tts(text):
     headers = {
         "Content-Type": "application/ssml+xml",
         "X-Microsoft-OutputFormat": "riff-24khz-16bit-mono-pcm",
-        "Ocp-Apim-Subscription-Key": api_key
+        "Ocp-Apim-Subscription-Key": "3KDu9w9L3PsFSjcYcTqqkGKctaCoTCIWuvHvPqxd2niN2QpSk5TrJQQJ99BLACYeBjFXJ3w3AAAYACOGI0lI"
     }
     
     body = f"""
@@ -75,7 +75,55 @@ def request_tts(text):
 # 페이지 설정
 st.set_page_config(page_title="Teeni", page_icon="🌱", layout="wide")
 
-st.markdown("<h1>청소년을 위한 AI 서비스 <span style='color: #008080;'>Teeni</span></h1>", unsafe_allow_html=True)
+# 배경색 변경 CSS
+st.markdown("""
+    <style>
+    /* 메인 배경색 */
+    .stApp {
+        background-color: #B6DADA;
+    }
+    
+    /* 사이드바 배경색 */
+    [data-testid="stSidebar"] {
+        background-color: #9BC7C7;
+    }
+    
+    /* 입력 박스 배경색 */
+    .stTextInput > div > div > input {
+        background-color: white;
+    }
+    
+    /* 텍스트 영역 배경색 */
+    .stTextArea > div > div > textarea {
+        background-color: white;
+    }
+    
+    /* 채팅 입력창 배경색 */
+    .stChatInput > div > div > textarea {
+        background-color: white;
+    }
+    
+    /* 셀렉트 박스 배경색 */
+    .stSelectbox > div > div > select {
+        background-color: white;
+    }
+    
+    /* 날짜/시간 입력 배경색 */
+    .stDateInput > div > div > input,
+    .stTimeInput > div > div > input {
+        background-color: white;
+    }
+    
+    /* 파일 업로더 배경색 */
+    [data-testid="stFileUploader"] {
+        background-color: white;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+st.markdown("<h1>청소년을 위한 AI 서비스 <span style='color: #008080;'>Teeni🌱</span></h1>", unsafe_allow_html=True)
+
+######################################################
 
 # Session State 초기화 (기능별 메시지 분리)
 if "current_menu" not in st.session_state:
@@ -102,32 +150,32 @@ except Exception as e:
 
 # ===== 사이드바 =====
 with st.sidebar:
-    st.header("🎯 메뉴")
+    st.header("메뉴")
     
     # 메뉴 버튼들
     if st.button("🏠 홈", use_container_width=True):
         st.session_state.current_menu = "홈"
         st.rerun()
     
-    if st.button("📚 기능A. 학습 지원", use_container_width=True):
-        st.session_state.current_menu = "학습지원"
+    if st.button("📚 학습 지원", use_container_width=True):
+        st.session_state.current_menu = "학습 지원"
         st.rerun()
     
-    if st.button("💬 기능B. 심리상담", use_container_width=True):
-        st.session_state.current_menu = "심리상담"
+    if st.button("💬 심리 상담", use_container_width=True):
+        st.session_state.current_menu = "심리 상담"
         st.rerun()
     
-    if st.button("📅 기능C. 일정관리", use_container_width=True):
-        st.session_state.current_menu = "일정관리"
+    if st.button("📅 일정 관리", use_container_width=True):
+        st.session_state.current_menu = "일정 관리"
         st.rerun()
     
     st.divider()
     
     # 대화 초기화 버튼
     if st.button("🔄 새 대화 시작", use_container_width=True):
-        if st.session_state.current_menu == "학습지원":
+        if st.session_state.current_menu == " ":
             st.session_state.study_messages = []
-        elif st.session_state.current_menu == "심리상담":
+        elif st.session_state.current_menu == "심리 상담":
             st.session_state.counsel_messages = []
         st.session_state.audio_processed = False
         st.rerun()
@@ -143,12 +191,12 @@ with st.sidebar:
     
     # 정보 표시
     st.subheader("ℹ️ 안내")
-    st.info("너 나의 친구가 되라! Teeni와 함께 밝은 내일로 가보자!")
+    st.info("Teeni에 오신 것을 환영합니다!")
     
     # 대화 횟수 표시
-    if st.session_state.current_menu == "학습지원":
+    if st.session_state.current_menu == " ":
         message_count = len([m for m in st.session_state.study_messages if m["role"] == "user"])
-    elif st.session_state.current_menu == "심리상담":
+    elif st.session_state.current_menu == "심리 상담":
         message_count = len([m for m in st.session_state.counsel_messages if m["role"] == "user"])
     else:
         message_count = 0
@@ -158,7 +206,7 @@ with st.sidebar:
 
 # 홈 화면
 if st.session_state.current_menu == "홈":
-    st.subheader("🌱 Teeni에 오신 것을 환영합니다!")
+    st.subheader("Teeni와 함께 밝은 내일로!")
     
     col1, col2, col3 = st.columns(3)
     
@@ -166,28 +214,28 @@ if st.session_state.current_menu == "홈":
         st.markdown("### 📚 학습 지원")
         st.write("검정고시 준비, 언어·수리·외국어 학습을 도와드립니다.")
         if st.button("학습 시작하기", key="home_study"):
-            st.session_state.current_menu = "학습지원"
+            st.session_state.current_menu = " "
             st.rerun()
     
     with col2:
-        st.markdown("### 💬 심리상담")
+        st.markdown("### 💬 심리 상담")
         st.write("음성으로 편하게 고민을 나누고 상담받으세요.")
         if st.button("상담 시작하기", key="home_counsel"):
-            st.session_state.current_menu = "심리상담"
+            st.session_state.current_menu = "심리 상담"
             st.rerun()
     
     with col3:
-        st.markdown("### 📅 일정관리")
+        st.markdown("### 📅 일정 관리")
         st.write("학습 계획과 일정을 체계적으로 관리하세요.")
         if st.button("일정 관리하기", key="home_calendar"):
-            st.session_state.current_menu = "일정관리"
+            st.session_state.current_menu = "일정 관리"
             st.rerun()
 
 # 학습 지원 화면
-elif st.session_state.current_menu == "학습지원":
+elif st.session_state.current_menu == " ":
     st.subheader("📚 학습 지원")
     
-    tab1, tab2, tab3, tab4 = st.tabs(["🎓 검정고시 정보", "🔤 언어 학습", "🔢 수리 학습", "🌍 외국어 학습"])
+    tab1, tab2, tab3, tab4 = st.tabs(["🎓 검정고시 정보", "언어 학습", "수리 학습", "외국어 학습"])
     
     with tab1:
         st.write("### 검정고시 시험 정보")
@@ -202,8 +250,8 @@ elif st.session_state.current_menu == "학습지원":
         st.info("수학 학습과 관련된 질문을 해보세요!")
         
     with tab4:
-        st.write("### 외국어 학습")
-        st.info("영어 등 외국어 학습을 도와드립니다!")
+        st.write("### 외국어(영어) 학습")
+        st.info("영어 학습을 도와드립니다!")
     
     # 대화 내용 출력
     for message in st.session_state.study_messages:
@@ -216,7 +264,7 @@ elif st.session_state.current_menu == "학습지원":
         st.session_state.study_messages.append({"role": "user", "content": prompt})
         
         with st.chat_message("assistant"):
-            system_message = "너는 학교 밖 청소년을 위한 학습 지원 AI입니다. 검정고시, 언어, 수리, 외국어 학습을 친절하게 도와주세요."
+            system_message = "너는 학교 밖 청소년을 위한 학습 지원 AI입니다. 검정고시 정보를 알려주세요. 정확한 내용으로 학습을 도와주세요."
             
             try:
                 response = client.chat.completions.create(
@@ -236,9 +284,9 @@ elif st.session_state.current_menu == "학습지원":
             except Exception as e:
                 st.error(f"응답 생성 중 오류 발생: {str(e)}")
 
-# 심리상담 화면
-elif st.session_state.current_menu == "심리상담":
-    st.subheader("💬 심리상담 (음성 지원)")
+# 심리 상담 화면
+elif st.session_state.current_menu == "심리 상담":
+    st.subheader("💬 심리 상담 (음성 지원)")
     
     col1, col2 = st.columns([2, 1])
     
@@ -268,7 +316,7 @@ elif st.session_state.current_menu == "심리상담":
                     st.session_state.counsel_messages.append({"role": "user", "content": recognized_text})
                     
                     with st.spinner("답변을 생성하고 있습니다..."):
-                        system_message = "너는 청소년 심리상담 전문가입니다. 공감하고 따뜻하게 상담해주세요."
+                        system_message = "너는 청소년 심리 상담 전문가입니다. 공감하고 친절하게 상담해주세요."
                         
                         try:
                             response = client.chat.completions.create(
@@ -320,7 +368,7 @@ elif st.session_state.current_menu == "심리상담":
                         st.session_state.counsel_messages.append({"role": "user", "content": recognized_text})
                         
                         with st.spinner("답변을 생성하고 있습니다..."):
-                            system_message = "너는 청소년 심리상담 전문가입니다. 공감하고 따뜻하게 상담해주세요."
+                            system_message = "너는 청소년 심리 상담 전문가입니다. 공감하고 따뜻하게 상담해주세요."
                             
                             try:
                                 response = client.chat.completions.create(
@@ -372,7 +420,7 @@ elif st.session_state.current_menu == "심리상담":
         st.session_state.counsel_messages.append({"role": "user", "content": prompt})
         
         with st.chat_message("assistant"):
-            system_message = "너는 청소년 심리상담 전문가입니다. 공감하고 따뜻하게 상담해주세요."
+            system_message = "너는 청소년 심리 상담 전문가입니다. 공감하고 따뜻하게 상담해주세요."
             
             try:
                 response = client.chat.completions.create(
@@ -392,9 +440,9 @@ elif st.session_state.current_menu == "심리상담":
             except Exception as e:
                 st.error(f"응답 생성 중 오류 발생: {str(e)}")
 
-# 일정관리 화면
-elif st.session_state.current_menu == "일정관리":
-    st.subheader("📅 일정관리")
+# 일정 관리 화면
+elif st.session_state.current_menu == "일정 관리":
+    st.subheader("📅 일정 관리")
     
     col1, col2 = st.columns([1, 1])
     
